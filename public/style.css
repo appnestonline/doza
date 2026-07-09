@@ -1,4 +1,4 @@
-/* Febra - clean, calm, adult. */
+/* Doza - clean, calm, adult. */
 
 :root {
   --bg: #f6f7f9;
@@ -6,9 +6,9 @@
   --ink: #1c2430;
   --ink-soft: #5b6674;
   --ink-faint: #8d97a5;
-  --accent: #0f766e;        /* calm teal */
+  --accent: #2f7d4f;        /* forest green */
   --accent-ink: #ffffff;
-  --accent-soft: #e6f2f1;
+  --accent-soft: #e7f2ec;
   --warn-bg: #fff7e6;
   --warn-border: #f0d9a8;
   --warn-ink: #7a5b16;
@@ -17,8 +17,8 @@
   --line: #e3e7ec;
   --input-bg: #fbfcfd;
   --input-focus-bg: #ffffff;
-  --btn-primary-hover: #0b5f58;
-  --chip-hover: #d8ebe9;
+  --btn-primary-hover: #26663f;
+  --chip-hover: #d6eadf;
   --del-hover-bg: #fdf1f0;
   --summary-bg: #f3f5f7;
   --urgent-bg: #fdecea;
@@ -403,7 +403,7 @@ code { background: var(--accent-soft); padding: 1px 6px; border-radius: 6px; fon
 
 .form-error { color: var(--danger); font-size: .88rem; margin: 0; }
 
-/* ---------------- temperature chart ---------------- */
+/* ---------------- dose timeline chart ---------------- */
 
 .chart-card { margin-top: 28px; padding: 18px 22px 12px; }
 .chart-card h2 { margin: 0 0 10px; font-size: 1.05rem; letter-spacing: -.01em; }
@@ -418,6 +418,8 @@ code { background: var(--accent-soft); padding: 1px 6px; border-radius: 6px; fon
 .chart-daysep { stroke: var(--ink-faint); stroke-dasharray: 3 3; stroke-width: 1; opacity: .55; }
 .chart-label { fill: var(--ink-faint); font-size: 11px; font-family: var(--font); }
 .chart-tick { stroke: var(--ink-faint); stroke-width: 1; }
+/* medicine lane labels in the timeline's left gutter */
+.chart-lane { fill: var(--ink-soft); font-weight: 600; }
 
 /* ---------------- log ---------------- */
 
@@ -515,6 +517,39 @@ code { background: var(--accent-soft); padding: 1px 6px; border-radius: 6px; fon
   margin-bottom: 18px;
 }
 .since-box strong { font-variant-numeric: tabular-nums; }
+
+/* per-medicine status card: last dose / doses in 24 h / next planned */
+.status-card { margin-bottom: 18px; padding: 18px 22px 12px; }
+.status-card h2 { margin: 0 0 6px; font-size: 1.05rem; letter-spacing: -.01em; }
+.status-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 14px;
+  padding: 9px 0;
+}
+.status-row + .status-row { border-top: 1px solid var(--line); }
+.status-med {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+.status-name { font-weight: 600; color: var(--accent); }
+.status-dose { color: var(--ink-soft); font-size: .88rem; }
+.status-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin-left: auto;
+  font-size: .88rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.status-count { color: var(--ink-faint); }
+.status-next { font-weight: 600; color: var(--accent); }
+.status-next.overdue { color: var(--warm); }
 
 /* ---------------- gone view ---------------- */
 
@@ -633,9 +668,9 @@ dialog::backdrop { background: rgba(20, 28, 38, .45); }
     --ink: #e7ecf2;
     --ink-soft: #a6b1be;
     --ink-faint: #75808d;
-    --accent: #2fbcab;
-    --accent-ink: #06211d;
-    --accent-soft: #143430;
+    --accent: #58b581;
+    --accent-ink: #07271a;
+    --accent-soft: #143323;
     --warn-bg: #2b2410;
     --warn-border: #6a5620;
     --warn-ink: #eacc7b;
@@ -644,8 +679,8 @@ dialog::backdrop { background: rgba(20, 28, 38, .45); }
     --line: #2b3542;
     --input-bg: #141b22;
     --input-focus-bg: #10161c;
-    --btn-primary-hover: #26a293;
-    --chip-hover: #1b453f;
+    --btn-primary-hover: #4aa572;
+    --chip-hover: #1b4530;
     --del-hover-bg: #3a2320;
     --summary-bg: #141b22;
     --urgent-bg: #3a1d19;
@@ -660,9 +695,9 @@ dialog::backdrop { background: rgba(20, 28, 38, .45); }
   --ink: #e7ecf2;
   --ink-soft: #a6b1be;
   --ink-faint: #75808d;
-  --accent: #2fbcab;
-  --accent-ink: #06211d;
-  --accent-soft: #143430;
+  --accent: #58b581;
+  --accent-ink: #07271a;
+  --accent-soft: #143323;
   --warn-bg: #2b2410;
   --warn-border: #6a5620;
   --warn-ink: #eacc7b;
@@ -671,8 +706,8 @@ dialog::backdrop { background: rgba(20, 28, 38, .45); }
   --line: #2b3542;
   --input-bg: #141b22;
   --input-focus-bg: #10161c;
-  --btn-primary-hover: #26a293;
-  --chip-hover: #1b453f;
+  --btn-primary-hover: #4aa572;
+  --chip-hover: #1b4530;
   --del-hover-bg: #3a2320;
   --summary-bg: #141b22;
   --urgent-bg: #3a1d19;

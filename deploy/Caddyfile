@@ -1,0 +1,24 @@
+# Caddy config for Doza on the a VPS (203.0.113.1).
+# Prerequisite: an A record doza.appnest.online -> 203.0.113.1 at the registrar.
+# Once it resolves, Caddy fetches and renews the HTTPS cert automatically.
+#
+# Append this block to /etc/caddy/Caddyfile, then: sudo systemctl reload caddy
+
+doza.appnest.online {
+    reverse_proxy 127.0.0.1:3002
+    encode gzip
+
+    # Access log to its own file. JSON format, rotated at 10 MB, keep 10
+    # files, drop after 720h (30 days).
+    # NOTE: tracker /t/<token> URLs are logged in full and the token is a
+    # bearer credential - treat this file as sensitive (mode 0640).
+    log {
+        output file /var/log/caddy/doza.log {
+            mode 0640
+            roll_size 10MB
+            roll_keep 10
+            roll_keep_for 720h
+        }
+        format json
+    }
+}

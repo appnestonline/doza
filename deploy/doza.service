@@ -1,0 +1,24 @@
+[Unit]
+Description=Doza medication course tracker
+After=network.target
+
+[Service]
+Type=simple
+User=deploy
+WorkingDirectory=/home/deploy/apps/doza
+Environment=PORT=3002
+Environment=HOST=127.0.0.1
+Environment=TRUST_PROXY=1
+ExecStart=/usr/bin/node /home/deploy/apps/doza/server.js
+Restart=on-failure
+RestartSec=5
+
+# Minor sandboxing - the process only needs to read/write its own folder.
+# ReadWritePaths is REQUIRED with ProtectSystem=strict, or the service fails
+# on its first disk write.
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/home/deploy/apps/doza/data
+
+[Install]
+WantedBy=multi-user.target

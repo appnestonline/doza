@@ -107,8 +107,9 @@ Dark (Febra's teal shown; swap the accent trio for your hue):
 ```
 
 **Accent hues already taken:** Febra = teal `#0f766e` (dark `#2fbcab`); Tensio = slate-blue
-`#3b5f8f` (dark `#6297d8`). Pick a *distinct but equally calm, desaturated* hue for a new
-tool (e.g. muted plum, forest green, clay). Keep roughly the same lightness/saturation so it
+`#3b5f8f` (dark `#6297d8`); Doza = forest green `#2f7d4f` (dark `#58b581`). Pick a *distinct
+but equally calm, desaturated* hue for a new
+tool (e.g. muted plum, clay). Keep roughly the same lightness/saturation so it
 reads as a sibling, not a different brand. `--accent-soft` is a very light tint of the
 accent; `--btn-primary-hover` is the accent one step darker.
 
