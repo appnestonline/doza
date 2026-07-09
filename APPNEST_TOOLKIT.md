@@ -5,7 +5,8 @@
 > and behave like part of the same family**. Febra (`/home/deploy/apps/febra`) is the
 > reference implementation - when in doubt, open its `server.js`, `public/`, and `test.js`
 > and copy the pattern. Tensio (blood-pressure diary) is the worked example of a *second*
-> tool built from that pattern - a good diff to study for "what actually changes per tool".
+> tool built from that pattern - a good diff to study for "what actually changes per tool";
+> Doza (medication-course tracker) is a *third*.
 >
 > **Companion doc:** `the private infra doc` (owner's infra handover) is the authoritative
 > source for the server itself - access, security, backups, monitoring. This doc does **not**
@@ -27,11 +28,11 @@ and then the data expires. That episodic shape is *why* the privacy posture work
 accounts, auto-expiry) and *why* the tool can stay tiny (one process, files, no sync).
 
 - **Good fit:** a defined measuring episode with a clear end. Febra = a fever (days).
-  Tensio = a pre-visit BP protocol (a week or two). Others in the same shape: a symptom/pain
-  diary before a specialist visit, a peak-flow log during an asthma flare, a migraine diary
-  for a neurology appointment.
+  Tensio = a pre-visit BP protocol (a week or two). Doza = a course of medication (days to a
+  few weeks). Others in the same shape: a symptom/pain diary before a specialist visit, a
+  peak-flow log during an asthma flare, a migraine diary for a neurology appointment.
 - **TTL is sized to the episode, not fixed.** Febra keeps data 5 days after the last entry
-  (cap 30); Tensio 15 days (cap 1 year). Pick the shortest window that outlives the real
+  (cap 30); Tensio 15 days (cap 1 year); Doza 10 days (cap 60). Pick the shortest window that outlives the real
   use, then let it erase. Longer TTLs quietly erode the "temporary by design" identity - if
   a tool seems to need *months*, question whether it fits at all.
 - **Poor fit:** chronic, lifelong conditions (e.g. diabetes day-to-day management). They
@@ -108,10 +109,9 @@ Dark (Febra's teal shown; swap the accent trio for your hue):
 
 **Accent hues already taken:** Febra = teal `#0f766e` (dark `#2fbcab`); Tensio = slate-blue
 `#3b5f8f` (dark `#6297d8`); Doza = forest green `#2f7d4f` (dark `#58b581`). Pick a *distinct
-but equally calm, desaturated* hue for a new
-tool (e.g. muted plum, clay). Keep roughly the same lightness/saturation so it
-reads as a sibling, not a different brand. `--accent-soft` is a very light tint of the
-accent; `--btn-primary-hover` is the accent one step darker.
+but equally calm, desaturated* hue for a new tool (e.g. muted plum, clay). Keep roughly the
+same lightness/saturation so it reads as a sibling, not a different brand. `--accent-soft`
+is a very light tint of the accent; `--btn-primary-hover` is the accent one step darker.
 
 ### 1.2 Dark mode (system + manual) - keep this architecture
 
