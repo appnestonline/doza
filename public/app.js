@@ -71,7 +71,9 @@
       priv2: "Where and for how long: on our server in the EU, reachable only through your tracker's random link. Everything is permanently erased 10 days after the last entry (60 days at most).",
       priv3: 'Technical logs: like almost every website, the server keeps standard access logs (IP address and requested address) for up to 30 days, used only for protection against abuse.',
       priv4: 'Your control: delete any entry yourself, or simply let the tracker expire - nothing is kept afterwards.',
-      priv5: "Who makes this: Doza is built by Ivan, an independent developer. The family began with Febra - made so he and his wife could track their sick child's fever and medicines together - and Doza grew from the suggestions that followed.",
+      aboutLink: 'About',
+      aboutTitle: 'Who makes this',
+      aboutBody: "My name is Ivan, and I'm an independent developer. I built these tools first of all for myself and the people close to me, but I decided to share them with everyone, free. The family started with Febra - created so my wife and I could track our sick child's temperature and medicines together. Tensio and Doza came later, at others' suggestion. I hope health serves you and us well, and that you need these tools as little as possible.",
       phMed: 'e.g. Amoxicillin',
       phDose: 'e.g. 250 mg/5 ml',
       phNote: 'e.g. with food, half a tablet, right eye',
@@ -180,7 +182,9 @@
       priv2: 'Gdje i koliko dugo: na našem poslužitelju u EU, dostupno samo preko nasumične poveznice vašeg dnevnika. Sve se trajno briše 10 dana nakon zadnjeg unosa (najviše 60 dana).',
       priv3: 'Tehnički zapisi: kao i gotovo svaka web stranica, poslužitelj čuva standardne pristupne zapise (IP adresa i tražena adresa) do 30 dana, isključivo radi zaštite od zlouporabe.',
       priv4: 'Vaša kontrola: sami izbrišite bilo koji unos ili jednostavno pustite da dnevnik istekne - nakon toga ništa ne ostaje.',
-      priv5: 'Tko stoji iza alata: Dozu izrađuje Ivan, samostalni programer. Obitelj alata započela je Febrom - nastalom kako bi on i supruga zajedno pratili temperaturu i terapiju bolesnog djeteta - a Doza je nastala iz kasnijih prijedloga.',
+      aboutLink: 'O autoru',
+      aboutTitle: 'Tko stoji iza alata',
+      aboutBody: 'Zovem se Ivan, samostalni sam programer. Ove alate izradio sam prvenstveno za sebe i svoje bližnje, no odlučio sam ih besplatno podijeliti sa svima. Obitelj alata započela je s Febrom - nastalom kako bi supruga i ja mogli zajedno pratiti temperaturu i terapiju bolesnog djeteta. Tensio i Doza nastali su na prijedlog ostalih. Nadam se da će vas i nas zdravlje poslužiti i da će vam ovi alati biti što manje potrebni.',
       phMed: 'npr. Amoksicilin',
       phDose: 'npr. 250 mg/5 ml',
       phNote: 'npr. uz obrok, pola tablete, desno oko',
@@ -1184,6 +1188,8 @@
   $('lang-hr').addEventListener('click', () => setLang('hr'));
   $('privacy-link').addEventListener('click', () => $('privacy-modal').showModal());
   $('btn-privacy-close').addEventListener('click', () => $('privacy-modal').close());
+  $('about-link').addEventListener('click', () => $('about-modal').showModal());
+  $('btn-about-close').addEventListener('click', () => $('about-modal').close());
 
   const m = location.pathname.match(/^\/t\/([a-zA-Z1-9]{14})$/);
   if (m) initTracker(m[1]);
