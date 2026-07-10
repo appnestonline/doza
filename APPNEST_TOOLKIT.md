@@ -230,6 +230,9 @@ unless told otherwise. The pattern (copy it):
 - Static markup carries `data-i18n="key"`; `applyStaticI18n()` sets `textContent` +
   input placeholders + `document.title`.
 - Language toggle persists to `store` and re-renders live (no reload).
+- **Date/time format follows the language**: HR → 24h + `dd.mm.yyyy`, EN → 12h + `mm/dd/yyyy`,
+  applied both at first load and on every language switch, so a Croatian user never sees
+  American dates. The manual 12h/24h pill still overrides within a session.
 - **Known limitation:** template i18n can't decline Croatian nouns (user-entered words stay
   nominative). Acceptable; don't try to fix with declension logic.
 - `test.js` statically asserts every `data-i18n` key and every `t('key')` exists in **both**
@@ -261,17 +264,17 @@ deployment, the box (a VPS, `203.0.113.1`) already has:
   configured (reuse whatever method Febra used - e.g. an SSH deploy key - for new repos
   too; a private repo per tool is the norm, doubling as off-box backup).
 
-**DNS is per-subdomain A records at the registrar (the registrar), not a wildcard.** Each
-new tool needs its own `<name>.appnest.online` → `203.0.113.1` A record added
-*before* Caddy can issue that tool's certificate - this is a manual step every time,
-unlike a wildcard setup.
+**DNS is a wildcard `*.appnest.online` → `203.0.113.1` (at the registrar), already in
+place.** A new tool needs **no new DNS record** - `<name>.appnest.online` resolves as soon
+as you pick the name, and Caddy issues the certificate the moment its block is reloaded.
+(The owner manages DNS manually, only for the `appnest.online` zone.)
 
 Per-app steps, condensed:
 
 1. **Pick the next free port.** Febra = 3000, Tensio = 3001. New tools: 3002, 3003, …
    Bind `127.0.0.1` only.
-2. **Add the DNS record** for `<name>.appnest.online` at the registrar, pointing to the
-   server IP (see note above - do this early, DNS propagation isn't instant).
+2. **No DNS step** - the wildcard above already resolves `<name>.appnest.online`, so go
+   straight to the code/systemd/Caddy steps.
 3. **Get code on the box:** `git clone` the tool's private repo into
    `/home/deploy/apps/<name>/`, as the `deploy` user. `mkdir -p
    /home/deploy/apps/<name>/data`.
@@ -286,11 +289,11 @@ Per-app steps, condensed:
        encode gzip
    }
    ```
-   `sudo systemctl reload caddy`. Caddy auto-issues the Let's Encrypt cert on first hit,
-   once the DNS record from step 2 has propagated.
+   `sudo systemctl reload caddy`. Caddy auto-issues the Let's Encrypt cert on first hit
+   (the wildcard DNS already resolves, so there's nothing to wait for).
 6. **Logging decision:** the tracker `/t/<token>` URL *is* the credential (a bearer link),
-   so how the proxy logs is a deliberate per-tool call. Current choice: **Febra and Tensio
-   both log** to their own file (`log { output file /var/log/caddy/<name>.log }`, default
+   so how the proxy logs is a deliberate per-tool call. Current choice: **Febra, Tensio and Doza
+   all log** to their own file (`log { output file /var/log/caddy/<name>.log }`, default
    Caddy JSON + auto-rotation) - the owner accepts that the token URLs sit in that file and
    treats it as sensitive; the per-app `*-stats.sh` scripts read it. The alternatives, if a
    future tool's data is more sensitive, are `output discard` or logging with the URI path

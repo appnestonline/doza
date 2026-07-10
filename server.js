@@ -157,6 +157,16 @@ function clientIp(req) {
 
 /* ---------------------------------------------------------------- helpers */
 
+// An fs error embeds the tracker file's path, and that path is the secret
+// token (files are named <token>.json). For such errors log only the
+// token-free code + syscall, so a disk-full or permission failure can't write
+// a bearer link into the service log (journald). Errors without a code carry
+// no token, so keep their full detail for debugging.
+function logErr(label, err) {
+  if (err && err.code) console.error(label, err.code, err.syscall || '');
+  else console.error(label, err);
+}
+
 function sendJson(res, status, obj, extraHeaders) {
   if (res.headersSent) return res.end();
   const body = JSON.stringify(obj);
@@ -199,7 +209,7 @@ function readBody(req, res, cb) {
     try {
       cb(obj);
     } catch (err) {
-      console.error('Handler error:', err);
+      logErr('Handler error:', err);
       sendJson(res, 500, { error: 'Internal server error' });
     }
   });
@@ -425,13 +435,13 @@ const server = http.createServer((req, res) => {
   } catch (err) {
     // a thrown handler (e.g. disk full in saveTracker) must never take the
     // process - and everyone else's tracker - down with it
-    console.error('Handler error:', err);
+    logErr('Handler error:', err);
     sendJson(res, 500, { error: 'Internal server error' });
   }
 });
 
-process.on('uncaughtException', (err) => console.error('Uncaught exception:', err));
-process.on('unhandledRejection', (err) => console.error('Unhandled rejection:', err));
+process.on('uncaughtException', (err) => logErr('Uncaught exception:', err));
+process.on('unhandledRejection', (err) => logErr('Unhandled rejection:', err));
 
 server.listen(PORT, HOST, () => {
   console.log(`Doza running on http://${HOST}:${PORT}`);

@@ -1,6 +1,6 @@
 # Caddy config for Doza on the a VPS (203.0.113.1).
-# Prerequisite: an A record doza.appnest.online -> 203.0.113.1 at the registrar.
-# Once it resolves, Caddy fetches and renews the HTTPS cert automatically.
+# DNS: the wildcard *.appnest.online (at the registrar) already resolves doza.appnest.online,
+# so no per-subdomain record is needed - Caddy fetches and renews the HTTPS cert automatically.
 #
 # Append this block to /etc/caddy/Caddyfile, then: sudo systemctl reload caddy
 

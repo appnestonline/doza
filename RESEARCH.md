@@ -217,15 +217,14 @@ name), EU server, erased 10 days after last entry (60 days max), Caddy logs
 
 ---
 
-## 4. Open questions for the owner
+## 4. Owner decisions (confirmed 2026-07-10)
 
-1. TTL 10 days / 60-day cap OK? (§3.1)
-2. Planned-interval cap at 72 h, single "every N hours" field (an "every N
-   days" alternative was rejected to keep the form lean)? (§3.3)
-3. Dedicated "given by" field (initials) instead of using the note? (§3.3)
-4. Interval presets (4/6/8/12/24 h chips) or course templates? v1 relies on
-   quick-fill chips learning the user's own combos instead. (§3.4)
-5. A pre-expiry "copy/print your summary" nudge for courses approaching the
-   60-day cap? (§3.1, §2.3)
-6. Logo: capsule motif OK, or prefer a pill-bottle / blister-pack mark?
-   Forest-green accent OK? (§1)
+All resolved by the owner; v1 ships exactly as built.
+
+1. TTL 10 days / 60-day cap - **OK.** (§3.1)
+2. Planned-interval cap 72 h, single "every N hours" field - **keep as is.** (§3.3)
+3. Dedicated "given by" field - **no; leave as is** (use the note). (§3.3)
+4. Interval presets / course templates - **no; leave as is** (quick-fill chips
+   learn the user's own combos). (§3.4)
+5. Pre-expiry "copy/print your summary" nudge - **no; leave as is.** (§3.1, §2.3)
+6. Logo capsule motif + forest-green accent - **OK; leave as is.** (§1)
