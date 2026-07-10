@@ -21,15 +21,15 @@
       docTitle: 'Doza - track a course of medication together',
       tagline: 'medication log you can share',
       heroTitle: 'One course of medication, everyone on the same page.',
-      lede: 'Log every dose of antibiotics, painkillers or drops. See at a glance how long ago the last dose was given and when the next one is planned. Share one link with the other caregiver - no account, no app, nothing to install.',
+      lede: 'Log every dose of antibiotics, painkillers or drops. Instantly see how long ago the last dose was and when the next one is due. For shared care, share the link with another person - no account, no app, nothing to install.',
       btnCreate: 'Create a tracker',
       recentTitle: 'Your recent trackers on this device:',
       how1Title: 'Get a private link',
       how1Body: "One click gives you a random link. Bookmark it or send it to yourself - it's the only key to your data.",
       how2Title: 'Log each dose',
-      how2Body: "Medicine, dose, time. Medicines and doses you've used before come back as one-tap chips, so you never type them twice.",
+      how2Body: "Medicine, dose, time. Medicines and doses you've used before come back as a ready-made template, so you never type them twice.",
       how3Title: 'Share & summarise',
-      how3Body: 'Both caregivers open the same link and see the same log - nobody double-doses. One click builds a plain-text summary for the follow-up visit.',
+      how3Body: 'Everyone opens the same link and sees the same log - so you avoid missed or extra doses. One click builds a plain-text summary for the follow-up visit.',
       privateTitle: 'Private by design.',
       privateBody: 'No accounts, no names required. Links are unguessable random codes.',
       tempTitle: 'Temporary by design.',
@@ -129,15 +129,15 @@
       docTitle: 'Doza - zajedničko bilježenje doza lijekova',
       tagline: 'dnevnik lijekova koji možete podijeliti',
       heroTitle: 'Jedna terapija, svi u toku.',
-      lede: 'Zabilježite svaku dozu antibiotika, lijekova protiv bolova ili kapi. Na prvi pogled vidite koliko je prošlo od zadnje doze i kada je planirana sljedeća. Podijelite jednu poveznicu s drugom osobom koja daje lijekove - bez računa, bez aplikacije, bez instalacije.',
+      lede: 'Zabilježite svaku dozu antibiotika, lijekova protiv boli ili kapi. Odmah vidite koliko je prošlo od posljednje doze i kada je planirana sljedeća. Za zajedničku brigu podijelite poveznicu s drugom osobom - bez računa, bez aplikacije, bez instalacije.',
       btnCreate: 'Napravi dnevnik',
       recentTitle: 'Vaši nedavni dnevnici na ovom uređaju:',
       how1Title: 'Zatražite privatnu poveznicu',
       how1Body: 'Jednim klikom dobijete nasumičnu poveznicu. Istu dodajte u favorite ili pošaljite sebi - to je jedini ključ za vaše podatke.',
       how2Title: 'Zabilježite svaku dozu',
-      how2Body: 'Lijek, doza, vrijeme. Lijekove i doze koje ste već unosili nudimo kao gumbe za unos jednim dodirom, pa ih ne morate ponovno tipkati.',
+      how2Body: 'Lijek, doza, vrijeme. Lijekove i doze koje ste već unosili nudimo kao predložak za unos, pa ih ne morate ponovno tipkati.',
       how3Title: 'Podijelite i napravite sažetak',
-      how3Body: 'Obje osobe otvaraju istu poveznicu i vide iste zapise - nitko ne daje dozu dvaput. Jednim klikom nastaje sažetak za kontrolni pregled.',
+      how3Body: 'Svi otvaraju istu poveznicu i vide iste zapise - time izbjegavate propuštanje doza ili davanje doza viška. Jednim klikom nastaje sažetak za kontrolni pregled.',
       privateTitle: 'Anonimno.',
       privateBody: 'Bez računa, bez potrebe za imenom. Poveznice su nasumični kodovi koje je nemoguće pogoditi.',
       tempTitle: 'Vremenski ograničeno.',
@@ -322,11 +322,9 @@
   // 12h/24h clock preference: '24' → dd.mm.yyyy + HH:MM, '12' → mm/dd/yyyy + AM/PM.
   let clock = store.get('doza:clock');
   if (clock !== '12' && clock !== '24') {
-    try {
-      clock = new Intl.DateTimeFormat(undefined, { hour: 'numeric' }).resolvedOptions().hour12 ? '12' : '24';
-    } catch {
-      clock = '24';
-    }
+    // no explicit choice yet: follow the language (HR → 24h, EN → 12h);
+    // the 12h/24h toggle still overrides this and is remembered.
+    clock = lang === 'hr' ? '24' : '12';
   }
 
   function fmtTime(ts) {
@@ -1153,9 +1151,18 @@
     store.set('doza:lang', lang);
     $('lang-en').classList.toggle('on', lang === 'en');
     $('lang-hr').classList.toggle('on', lang === 'hr');
+    // date/time convention follows the language: HR → 24h + dd.mm.yyyy,
+    // EN → 12h + mm/dd/yyyy. The manual 12h/24h toggle can still override after.
+    const wantClock = lang === 'hr' ? '24' : '12';
+    if (wantClock !== clock) {
+      const keep = activeView === 'tracker' ? getFormTs() : null;
+      clock = wantClock;
+      store.set('doza:clock', clock);
+      if (keep) setFormTime(new Date(keep.error ? Date.now() : keep.ts));
+    }
     applyStaticI18n();
+    applyClock();
     if (activeView === 'tracker' && tracker) {
-      applyClock();
       renderAll();
     } else if (activeView === 'landing') {
       renderRecent();
