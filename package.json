@@ -1,0 +1,11 @@
+{
+  "name": "doza",
+  "version": "1.0.0",
+  "description": "Anonymous shared medication-course tracker - zero-dependency Node.js",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  }
+}

@@ -416,6 +416,10 @@ function handle(req, res) {
   }
 
   /* ----- pages / static ----- */
+  // tracker pages must never be indexed (the URL is the credential); the
+  // landing page is intentionally indexable, so the noindex is a header on
+  // /t/* only rather than a blanket meta tag in the shared index.html
+  if (p.startsWith('/t/')) res.setHeader('X-Robots-Tag', 'noindex');
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     res.writeHead(405, { 'Content-Type': 'text/plain' });
     return res.end('Method not allowed');
