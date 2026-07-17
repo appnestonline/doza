@@ -8,7 +8,7 @@ double-doses; hand the doctor a plain-text summary at the follow-up.
 
 Part of the **appnest** family of small tools (siblings: **Febra**, a child
 fever & medication tracker, and **Tensio**, a blood pressure diary). All run
-on the same a VPS behind one Caddy instance.
+on the same small VPS behind one Caddy instance.
 
 ## Run
 
@@ -73,13 +73,13 @@ Environment variables:
   writes (a crash can't corrupt a tracker), a crashed request can't take the
   process down, and control/bidi characters are stripped from all text input.
 
-## Deploying on the a VPS
+## Deploying on a VPS
 
 Doza is a real Node.js process (in-memory rate-limit counters, files on disk
 between requests), so static hosts like Netlify can't run it - it needs a
 persistent process and disk, which the VPS provides.
 
-The box: a VPS at **203.0.113.1**, Ubuntu, Caddy in front for
+The box: a small Ubuntu VPS with Caddy in front for
 automatic HTTPS. Febra listens on `127.0.0.1:3000`, Tensio on `:3001`, Doza
 on `:3002`. Only Caddy is public.
 
@@ -88,9 +88,9 @@ on `:3002`. Only Caddy is public.
 > your box uses a different path or service user, adjust the unit file and the
 > commands to match.
 
-### 1. DNS (one-time, at the registrar)
+### 1. DNS (one-time, at your registrar)
 
-Add an **A record**: `doza` → `203.0.113.1`. Once it resolves, Caddy
+Add an **A record** (or a wildcard) pointing `doza` at your server's IP. Once it resolves, Caddy
 issues the Let's Encrypt certificate automatically on first hit.
 
 ### 2. Get the code on the box
@@ -179,3 +179,7 @@ Doza is a note-taking aid, not medical advice. It has no drug database, no
 dose calculators and no warnings - the only schedule logic is arithmetic on
 the plan you enter yourself. Always follow the dose and schedule from your
 doctor and the medicine leaflet.
+
+## License
+
+MIT - see `LICENSE`.

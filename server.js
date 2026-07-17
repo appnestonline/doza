@@ -142,7 +142,7 @@ setInterval(() => {
 
 function clientIp(req) {
   if (process.env.TRUST_PROXY === '1') {
-    // Behind Caddy on the VPS: take the LAST X-Forwarded-For address
+    // Behind Caddy in production: take the LAST X-Forwarded-For address
     // - the one our own proxy appended. Earlier entries are client-supplied
     // and trivially spoofable, which would let an attacker mint a fresh
     // rate-limit bucket per request.

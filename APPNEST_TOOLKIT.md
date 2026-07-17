@@ -8,13 +8,12 @@
 > tool built from that pattern - a good diff to study for "what actually changes per tool";
 > Doza (medication-course tracker) is a *third*.
 >
-> **Companion doc:** `the private infra doc` (owner's infra handover) is the authoritative
-> source for the server itself - access, security, backups, monitoring. This doc does **not**
-> repeat server credentials; it covers *how to build a tool that fits* and the *per-app*
-> deploy steps. Read both.
+> **Scope note:** this public copy covers *how to build a tool that fits the family* and
+> the generic per-app deploy steps. Server specifics (access, credentials, backups,
+> monitoring) live in a private infra doc and are deliberately not repeated here.
 >
-> **Owner profile:** Oracle/PL-SQL/APEX developer who is also the DBA and sysadmin.
-> Comfortable on Linux/CLI. Prefers lean, transparent, reproducible setups over managed
+> **Owner profile:** a developer who is also the DBA and sysadmin. Comfortable on
+> Linux/CLI. Prefers lean, transparent, reproducible setups over managed
 > abstractions and heavy frameworks. Keep explanations technical and concise; keep code
 > dependency-free.
 
@@ -252,20 +251,20 @@ makes it visible.
 
 ## 3. Deploying a new tool on the shared server
 
-Full server context (access, firewall, backups, monitoring) is in `the private infra doc`.
+Full server context (access, firewall, backups, monitoring) lives in a private infra doc.
 
 **Server-level setup is already done - a new tool does NOT redo it.** As of Febra's
-deployment, the box (a VPS, `203.0.113.1`) already has:
+deployment, the box (a small Ubuntu VPS) already has:
 - Firewall open on 22 (SSH), 80/443 (HTTP/HTTPS).
 - A system user `deploy` owning `/home/deploy/apps/`.
 - Node.js (current LTS, via NodeSource - not the stale Ubuntu `apt` package) and Caddy
   installed.
 - Git/SSH access from the `deploy` user to the `appnestonline` GitHub org already
   configured (reuse whatever method Febra used - e.g. an SSH deploy key - for new repos
-  too; a private repo per tool is the norm, doubling as off-box backup).
+  too; a repo per tool is the norm, doubling as off-box backup).
 
-**DNS is a wildcard `*.appnest.online` → `203.0.113.1` (at the registrar), already in
-place.** A new tool needs **no new DNS record** - `<name>.appnest.online` resolves as soon
+**DNS is a wildcard `*.appnest.online` → the server, already in place.** A new tool
+needs **no new DNS record** - `<name>.appnest.online` resolves as soon
 as you pick the name, and Caddy issues the certificate the moment its block is reloaded.
 (The owner manages DNS manually, only for the `appnest.online` zone.)
 
