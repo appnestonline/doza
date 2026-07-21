@@ -427,6 +427,7 @@ function handle(req, res) {
 
   if (p === '/' || /^\/t\/[a-zA-Z1-9]{14}$/.test(p)) return serveFile(req, res, 'index.html');
   if (p === '/style.css') return serveFile(req, res, 'style.css');
+  if (p === '/head.js') return serveFile(req, res, 'head.js');
   if (p === '/app.js') return serveFile(req, res, 'app.js');
   if (p === '/favicon.svg' || p === '/favicon.ico') return serveFile(req, res, 'favicon.svg');
 

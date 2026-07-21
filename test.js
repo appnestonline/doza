@@ -55,6 +55,15 @@ const indexHtml = fs.readFileSync(path.join(ROOT, 'public', 'index.html'), 'utf8
 check('app.js parses', () => new vm.Script(appJs));
 check('server.js parses', () => new vm.Script(serverJs));
 
+const headJs = fs.readFileSync(path.join(ROOT, 'public', 'head.js'), 'utf8');
+check('head.js parses', () => new vm.Script(headJs));
+check('head.js loads before the stylesheet (no flash)', () => {
+  const iHead = indexHtml.indexOf('/head.js');
+  const iCss = indexHtml.indexOf('/style.css');
+  assert.ok(iHead !== -1, 'index.html does not load /head.js');
+  assert.ok(iHead < iCss, '/head.js must come before /style.css in the head');
+});
+
 check("every $('id') used in app.js exists in index.html", () => {
   const ids = [...new Set([...appJs.matchAll(/\$\('([a-zA-Z0-9-]+)'\)/g)].map((m) => m[1]))];
   assert.ok(ids.length > 20, `suspiciously few ids found (${ids.length}) - extraction broken?`);
@@ -122,6 +131,12 @@ async function main() {
       const r1 = await fetch(BASE + '/app.js');
       const r2 = await fetch(BASE + '/app.js', { headers: { 'If-Modified-Since': r1.headers.get('last-modified') } });
       assert.strictEqual(r2.status, 304);
+    });
+
+    await checkAsync('head.js serves as javascript', async () => {
+      const r = await fetch(BASE + '/head.js');
+      assert.strictEqual(r.status, 200);
+      assert.ok(r.headers.get('content-type').includes('javascript'));
     });
 
     /* --- tracker lifecycle --- */

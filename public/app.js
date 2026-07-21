@@ -1181,6 +1181,10 @@
 
   applyTheme();
   applyStaticI18n();
+  // head.js hid the document and pinned the theme until we localized the
+  // static chrome; now reveal it and hand styling back to CSS (see head.js).
+  document.documentElement.style.visibility = '';
+  document.documentElement.style.colorScheme = '';
   $('lang-en').classList.toggle('on', lang === 'en');
   $('lang-hr').classList.toggle('on', lang === 'hr');
 
