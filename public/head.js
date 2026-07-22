@@ -42,5 +42,6 @@
   // normal case app.js has already revealed and this is a harmless no-op.
   document.addEventListener('DOMContentLoaded', function () {
     el.style.visibility = '';
+    el.style.colorScheme = '';
   });
 })();

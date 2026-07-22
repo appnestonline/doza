@@ -116,8 +116,11 @@ setInterval(purgeExpired, 60 * 60 * 1000).unref();
 
 /* ---------------------------------------------------------------- rate limiting */
 
-// Sliding-window counters per IP. Two buckets: tracker creation (expensive,
-// abusable) and everything else. Memory is bounded by periodic sweep.
+// Fixed-window counters per IP: a window is anchored at the first request and
+// resets only once it fully elapses, so a burst of up to ~2x the limit is
+// possible across a boundary - acceptable given these modest limits. Two
+// buckets: tracker creation (expensive, abusable) and everything else. Memory
+// is bounded by periodic sweep.
 const rlCreate = new Map(); // ip -> {count, windowStart}
 const rlApi = new Map();
 
@@ -204,6 +207,12 @@ function readBody(req, res, cb) {
     } catch {
       return sendJson(res, 400, { error: 'Invalid JSON' });
     }
+    // every endpoint expects a JSON object body; reject null / array / primitive
+    // up front so a handler's property access can't throw (which would surface
+    // as a spurious 500 + noisy error log instead of a clean 400)
+    if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) {
+      return sendJson(res, 400, { error: 'Invalid JSON' });
+    }
     // the callback runs on a later tick, outside the top-level try/catch -
     // guard it separately so a failed disk write can't crash the process
     try {
@@ -230,6 +239,10 @@ function cleanStr(v, maxLen) {
 // integer in [min, max], or null when absent (allowed = optional field)
 function intIn(v, min, max) {
   if (v === null || v === undefined || v === '') return null;
+  // only a number or numeric string is acceptable - without this, Number(true)
+  // would become 1 and Number([5]) would become 5, letting booleans/arrays slip
+  // through as valid-looking integers
+  if (typeof v !== 'number' && typeof v !== 'string') return undefined;
   const n = Number(v);
   if (!Number.isInteger(n) || n < min || n > max) return undefined; // invalid
   return n;
